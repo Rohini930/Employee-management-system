@@ -1,0 +1,33 @@
+CREATE DATABASE IF NOT EXISTS employee_system1;
+USE employee_system1;
+
+-- Users table (employees and HR)
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('employee', 'hr') NOT NULL DEFAULT 'employee'
+);
+
+-- Attendance table to track employee attendance
+CREATE TABLE IF NOT EXISTS attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    attendance_date DATE NOT NULL,
+    status ENUM('Present', 'Absent') NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES users(id)
+);
+
+-- Payroll table to track monthly salary calculations
+CREATE TABLE IF NOT EXISTS payroll (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL,
+    total_days INT NOT NULL,
+    present_days INT NOT NULL,
+    absent_days INT NOT NULL,
+    salary DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
